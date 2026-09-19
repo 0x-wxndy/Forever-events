@@ -1,0 +1,118 @@
+@import "tailwindcss";
+
+:root {
+  --ivory: #fff8f4;
+  --blush: #f8e7ec;
+  --rose: #e8a1b3;
+  --rose-deep: #c97890;
+  --dusty: #b56d7f;
+  --champagne: #c4a574;
+  --ink: #4a3538;
+  --muted: #8d7478;
+}
+
+@theme inline {
+  --color-ivory: var(--ivory);
+  --color-blush: var(--blush);
+  --color-rose: var(--rose);
+  --color-rose-deep: var(--rose-deep);
+  --color-dusty: var(--dusty);
+  --color-champagne: var(--champagne);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --font-sans: var(--font-outfit);
+  --font-serif: var(--font-cormorant);
+  --font-script: var(--font-great-vibes);
+  --shadow-soft: 0 18px 50px rgba(181, 109, 127, 0.12);
+  --shadow-glow: 0 0 40px rgba(232, 161, 179, 0.28);
+}
+
+* {
+  border-color: rgba(201, 165, 168, 0.22);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--ivory);
+  color: var(--ink);
+  font-family: var(--font-outfit), sans-serif;
+}
+
+::selection {
+  background: #f3c9d4;
+  color: var(--ink);
+}
+
+.font-script {
+  font-family: var(--font-great-vibes), cursive;
+}
+
+.font-serif {
+  font-family: var(--font-cormorant), serif;
+}
+
+.glass {
+  background: rgba(255, 248, 244, 0.72);
+  backdrop-filter: blur(18px);
+  border: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+.petal {
+  position: absolute;
+  width: 10px;
+  height: 14px;
+  background: radial-gradient(circle at 30% 30%, #fff, #f4c2d1 55%, #e7a1b5);
+  border-radius: 80% 0 80% 0;
+  opacity: 0.7;
+  animation: fall linear infinite;
+  pointer-events: none;
+}
+
+@keyframes fall {
+  0% {
+    transform: translate3d(0, -10%, 0) rotate(0deg);
+    opacity: 0;
+  }
+  12% {
+    opacity: 0.8;
+  }
+  100% {
+    transform: translate3d(40px, 110vh, 0) rotate(280deg);
+    opacity: 0;
+  }
+}
+
+@keyframes float-soft {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+.sparkle {
+  position: absolute;
+  width: 5px;
+  height: 5px;
+  border-radius: 999px;
+  background: #fff;
+  box-shadow: 0 0 10px 3px rgba(255, 255, 255, 0.85);
+  animation: twinkle 3.6s ease-in-out infinite;
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.15;
+    transform: scale(0.7);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+}

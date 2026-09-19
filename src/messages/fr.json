@@ -1,0 +1,183 @@
+{
+  "meta": {
+    "title": "Forever Events — Planifier, célébrer, forever",
+    "description": "Forever Events rassemble les meilleurs prestataires à Oran pour organiser votre événement en quelques clics."
+  },
+  "nav": {
+    "home": "Accueil",
+    "about": "À propos",
+    "services": "Services",
+    "how": "Comment ça marche",
+    "contact": "Contact",
+    "create": "Créer mon événement",
+    "myEvent": "Mon Événement"
+  },
+  "brand": {
+    "tagline": "Planifier · Célébrer · Forever",
+    "moments": "Les beaux moments durent forever"
+  },
+  "hero": {
+    "eyebrow": "Votre événement de rêve, notre passion",
+    "title": "De la vision à la réalité,",
+    "titleScript": "on s’occupe de tout.",
+    "subtitle": "Organisez votre événement parfait en quelques clics.",
+    "scroll": "Défiler"
+  },
+  "trust": {
+    "personalized": "Service personnalisé",
+    "personalizedText": "On vous écoute",
+    "vendors": "Prestataires de confiance",
+    "vendorsText": "Les meilleurs dans chaque domaine",
+    "moments": "Des moments inoubliables",
+    "momentsText": "On les fait exister"
+  },
+  "homeServices": {
+    "eyebrow": "Nos services",
+    "title": "Tout ce qu’il vous faut",
+    "titleScript": "pour votre événement parfait",
+    "intro": "Des réunions intimes aux grandes célébrations, nous vous connectons aux meilleurs prestataires en Algérie pour donner vie à votre vision.",
+    "explore": "Voir tous les services"
+  },
+  "homeAbout": {
+    "eyebrow": "À propos de Forever Events",
+    "title": "Plus que des événements,",
+    "titleScript": "nous créons des souvenirs",
+    "body": "Chez Forever Events, nous croyons que chaque événement raconte une histoire. Notre mission : rendre l’organisation simple, joyeuse et inoubliable — en vous reliant à des prestataires de confiance et en gérant les détails, pour que vous puissiez vous concentrer sur l’essentiel.",
+    "cta": "En savoir plus",
+    "story": "Votre histoire,\nnotre priorité",
+    "statVendors": "Prestataires de confiance",
+    "statEvents": "Événements imaginés",
+    "statSatisfaction": "Satisfaction client"
+  },
+  "homeHow": {
+    "eyebrow": "Comment ça marche",
+    "title": "Organisez votre événement",
+    "titleScript": "en quelques étapes",
+    "step1": "Chercher & explorer",
+    "step1Text": "Trouvez les services parfaits pour votre événement.",
+    "step2": "Choisir & planifier",
+    "step2Text": "Sélectionnez vos prestataires et partagez vos détails.",
+    "step3": "Se détendre & profiter",
+    "step3Text": "Nous gérons le reste pendant que vous créez des souvenirs."
+  },
+  "footer": {
+    "rights": "© 2026 Forever Events. Tous droits réservés."
+  },
+  "aboutPage": {
+    "eyebrow": "Notre histoire",
+    "title": "Forever Events,",
+    "titleScript": "un point de départ élégant",
+    "lead": "Nous commençons à Oran, avec l’envie de rendre l’organisation d’un événement plus simple, plus belle, et plus humaine.",
+    "p1": "Aujourd’hui, trouver un photographe, une décoratrice, un DJ, une salle ou une maquilleuse veut souvent dire chercher partout : Instagram, WhatsApp, le bouche-à-oreille. Forever Events rassemble des prestataires sélectionnés au même endroit.",
+    "p2": "Ce n’est pas un simple annuaire. Nous choisissons les prestataires, vous construisez « Mon Événement », puis vous nous envoyez une seule demande. Notre équipe s’occupe ensuite de la coordination humaine.",
+    "p3": "Une plateforme belle et claire, pensée pour Oran : vous choisissez, nous coordonnons, et vous restez concentrée sur le jour J."
+  },
+  "servicesPage": {
+    "eyebrow": "Le catalogue",
+    "title": "Des services choisis",
+    "titleScript": "avec soin",
+    "lead": "Explorez les catégories disponibles à Oran, puis ajoutez les prestataires qui vous parlent à Mon Événement."
+  },
+  "service": {
+    "inCity": "Prestataires à {city}",
+    "startingFrom": "À partir de",
+    "viewProfile": "Voir la fiche",
+    "empty": "Les prestataires de cette catégorie arrivent bientôt.",
+    "backToServices": "Tous les services"
+  },
+  "vendor": {
+    "packages": "Formules",
+    "portfolio": "Portfolio",
+    "add": "Ajouter à Mon Événement",
+    "added": "Ajouté à Mon Événement",
+    "remove": "Retirer",
+    "back": "Retour aux prestataires",
+    "addAnother": "Ajouter un autre service"
+  },
+  "howPage": {
+    "eyebrow": "Le parcours",
+    "title": "Simple pour vous,",
+    "titleScript": "humain pour nous",
+    "lead": "Vous choisissez. Nous coordonnons. La magie reste dans les détails, pas dans un logiciel.",
+    "afterTitle": "Après votre demande",
+    "after1": "Nous recevons votre sélection et vos détails.",
+    "after2": "Nous confirmons avec vous par téléphone ou WhatsApp.",
+    "after3": "Nous contactons les prestataires et vérifions les disponibilités.",
+    "after4": "Vous avancez vers une réservation, sans envoyer dix messages différents."
+  },
+  "contactPage": {
+    "eyebrow": "Parlons-nous",
+    "title": "Une question,",
+    "titleScript": "une intention, un rêve",
+    "lead": "Écrivez-nous. Pour une demande d’événement complète, créez plutôt Mon Événement — c’est le chemin le plus clair.",
+    "name": "Nom",
+    "email": "Email",
+    "phone": "Téléphone",
+    "message": "Message",
+    "send": "Envoyer",
+    "success": "Merci, votre message est bien arrivé. Nous vous répondons très vite.",
+    "error": "Une erreur est survenue. Réessayez, ou écrivez-nous directement."
+  },
+  "createPage": {
+    "eyebrow": "Créer mon événement",
+    "title": "Par où commence",
+    "titleScript": "votre célébration ?",
+    "lead": "Choisissez votre ville, puis explorez les services. Oran est disponible aujourd’hui ; d’autres villes suivront.",
+    "city": "Ville",
+    "comingSoon": "Bientôt",
+    "continue": "Explorer les services"
+  },
+  "myEvent": {
+    "eyebrow": "Mon Événement",
+    "title": "Votre sélection,",
+    "titleScript": "une seule demande",
+    "empty": "Votre événement est encore tout blanc. Explorez les services et ajoutez les prestataires qui vous font rêver.",
+    "browse": "Voir les services",
+    "addMore": "Ajouter un autre service",
+    "formTitle": "Envoyer la demande",
+    "formLead": "Forever Events reçoit votre sélection, confirme les détails avec vous, puis contacte les prestataires.",
+    "eventType": "Type d’événement",
+    "eventDate": "Date prévue",
+    "guests": "Nombre d’invités (approx.)",
+    "submit": "Envoyer ma demande",
+    "success": "Votre demande est envoyée. Notre équipe vous contacte pour confirmer les détails.",
+    "error": "Impossible d’envoyer la demande pour le moment.",
+    "needVendors": "Ajoutez au moins un prestataire avant d’envoyer.",
+    "cityLabel": "Ville de l’événement"
+  },
+  "common": {
+    "required": "Requis"
+  },
+  "admin": {
+    "title": "Espace équipe",
+    "loginTitle": "Connexion équipe",
+    "loginLead": "Pour consulter les demandes et les messages.",
+    "password": "Mot de passe",
+    "signIn": "Entrer",
+    "signOut": "Déconnexion",
+    "invalid": "Mot de passe incorrect.",
+    "overview": "Vue d’ensemble",
+    "requests": "Demandes",
+    "messages": "Messages",
+    "vendors": "Prestataires",
+    "new": "Nouvelles",
+    "contacted": "Contactées",
+    "confirmed": "Confirmées",
+    "closed": "Clôturées",
+    "openSite": "Voir le site",
+    "emptyRequests": "Aucune demande pour le moment.",
+    "emptyMessages": "Aucun message pour le moment.",
+    "client": "Client",
+    "event": "Événement",
+    "selected": "Prestataires choisis",
+    "notes": "Notes internes",
+    "save": "Enregistrer",
+    "saved": "Enregistré",
+    "status": "Statut",
+    "back": "Toutes les demandes",
+    "date": "Date",
+    "guests": "Invités",
+    "city": "Ville",
+    "view": "Ouvrir"
+  }
+}

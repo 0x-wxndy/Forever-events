@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: forever
+      POSTGRES_PASSWORD: forever
+      POSTGRES_DB: forever_events
+    ports:
+      - "5432:5432"
+    volumes:
+      - forever_pg:/var/lib/postgresql/data
+
+volumes:
+  forever_pg:

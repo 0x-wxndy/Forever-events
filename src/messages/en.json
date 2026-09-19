@@ -1,0 +1,183 @@
+{
+  "meta": {
+    "title": "Forever Events — Plan, celebrate, forever",
+    "description": "Forever Events brings together trusted vendors in Oran so you can plan your event in a few clicks."
+  },
+  "nav": {
+    "home": "Home",
+    "about": "About Us",
+    "services": "Services",
+    "how": "How It Works",
+    "contact": "Contact",
+    "create": "Create My Event",
+    "myEvent": "My Event"
+  },
+  "brand": {
+    "tagline": "Plan · Celebrate · Forever",
+    "moments": "Beautiful moments last forever"
+  },
+  "hero": {
+    "eyebrow": "Your dream event, our passion",
+    "title": "From vision to reality,",
+    "titleScript": "we take care of everything.",
+    "subtitle": "Plan your perfect event in a few clicks.",
+    "scroll": "Scroll to explore"
+  },
+  "trust": {
+    "personalized": "Personalized Service",
+    "personalizedText": "We listen to you",
+    "vendors": "Trusted Vendors",
+    "vendorsText": "The best in every field",
+    "moments": "Unforgettable Moments",
+    "momentsText": "We make it happen"
+  },
+  "homeServices": {
+    "eyebrow": "Our services",
+    "title": "Everything You Need",
+    "titleScript": "for Your Perfect Event",
+    "intro": "From intimate gatherings to grand celebrations, we connect you with the best vendors in Algeria to bring your vision to life.",
+    "explore": "Explore All Services"
+  },
+  "homeAbout": {
+    "eyebrow": "About Forever Events",
+    "title": "More Than Events,",
+    "titleScript": "We Create Memories",
+    "body": "At Forever Events, we believe every event tells a story. Our mission is to make event planning simple, enjoyable, and unforgettable — by connecting you with trusted vendors and handling the details, so you can focus on what truly matters.",
+    "cta": "Learn More About Us",
+    "story": "Your Story,\nOur Priority",
+    "statVendors": "Trusted Vendors",
+    "statEvents": "Events Planned",
+    "statSatisfaction": "Client Satisfaction"
+  },
+  "homeHow": {
+    "eyebrow": "How it works",
+    "title": "Plan Your Event",
+    "titleScript": "in Just a Few Steps",
+    "step1": "Search & Explore",
+    "step1Text": "Find the perfect services for your event.",
+    "step2": "Choose & Plan",
+    "step2Text": "Select your vendors and share your details.",
+    "step3": "Relax & Enjoy",
+    "step3Text": "We handle the rest while you create unforgettable memories."
+  },
+  "footer": {
+    "rights": "© 2026 Forever Events. All rights reserved."
+  },
+  "aboutPage": {
+    "eyebrow": "Our story",
+    "title": "Forever Events,",
+    "titleScript": "an elegant starting point",
+    "lead": "We begin in Oran, with one wish: to make planning an event simpler, more beautiful, and more human.",
+    "p1": "Today, finding a photographer, decorator, DJ, venue or makeup artist often means searching everywhere: Instagram, WhatsApp, word of mouth. Forever Events gathers curated vendors in one place.",
+    "p2": "This is not just a directory. We select the vendors, you build “My Event”, then you send us a single request. Our team takes care of the human coordination.",
+    "p3": "A beautiful, clear platform built for Oran: you choose, we coordinate, and you stay focused on the day itself."
+  },
+  "servicesPage": {
+    "eyebrow": "The catalogue",
+    "title": "Services chosen",
+    "titleScript": "with care",
+    "lead": "Explore the categories available in Oran, then add the vendors that speak to you to My Event."
+  },
+  "service": {
+    "inCity": "Vendors in {city}",
+    "startingFrom": "From",
+    "viewProfile": "View profile",
+    "empty": "Vendors for this category are coming soon.",
+    "backToServices": "All services"
+  },
+  "vendor": {
+    "packages": "Packages",
+    "portfolio": "Portfolio",
+    "add": "Add to My Event",
+    "added": "Added to My Event",
+    "remove": "Remove",
+    "back": "Back to vendors",
+    "addAnother": "Add another service"
+  },
+  "howPage": {
+    "eyebrow": "The journey",
+    "title": "Simple for you,",
+    "titleScript": "human for us",
+    "lead": "You choose. We coordinate. The magic stays in the details, not in software.",
+    "afterTitle": "After you send a request",
+    "after1": "We receive your selection and your details.",
+    "after2": "We confirm with you by phone or WhatsApp.",
+    "after3": "We contact the vendors and check availability.",
+    "after4": "You move toward a booking — without sending ten different messages."
+  },
+  "contactPage": {
+    "eyebrow": "Let’s talk",
+    "title": "A question,",
+    "titleScript": "an intention, a dream",
+    "lead": "Write to us. For a full event request, create My Event — it is the clearest path.",
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "message": "Message",
+    "send": "Send",
+    "success": "Thank you, your message has arrived. We’ll reply very soon.",
+    "error": "Something went wrong. Please try again, or email us directly."
+  },
+  "createPage": {
+    "eyebrow": "Create my event",
+    "title": "Where does your",
+    "titleScript": "celebration begin?",
+    "lead": "Choose your city, then explore services. Oran is available today; more cities will follow.",
+    "city": "City",
+    "comingSoon": "Coming soon",
+    "continue": "Explore services"
+  },
+  "myEvent": {
+    "eyebrow": "My Event",
+    "title": "Your selection,",
+    "titleScript": "one single request",
+    "empty": "Your event is still a blank page. Explore the services and add the vendors that make you dream.",
+    "browse": "Browse services",
+    "addMore": "Add another service",
+    "formTitle": "Send the request",
+    "formLead": "Forever Events receives your selection, confirms the details with you, then contacts the vendors.",
+    "eventType": "Event type",
+    "eventDate": "Planned date",
+    "guests": "Number of guests (approx.)",
+    "submit": "Send my request",
+    "success": "Your request has been sent. Our team will contact you to confirm the details.",
+    "error": "We couldn’t send the request just now.",
+    "needVendors": "Add at least one vendor before sending.",
+    "cityLabel": "Event city"
+  },
+  "common": {
+    "required": "Required"
+  },
+  "admin": {
+    "title": "Team space",
+    "loginTitle": "Team login",
+    "loginLead": "To review requests and messages.",
+    "password": "Password",
+    "signIn": "Enter",
+    "signOut": "Sign out",
+    "invalid": "Incorrect password.",
+    "overview": "Overview",
+    "requests": "Requests",
+    "messages": "Messages",
+    "vendors": "Vendors",
+    "new": "New",
+    "contacted": "Contacted",
+    "confirmed": "Confirmed",
+    "closed": "Closed",
+    "openSite": "View site",
+    "emptyRequests": "No requests yet.",
+    "emptyMessages": "No messages yet.",
+    "client": "Client",
+    "event": "Event",
+    "selected": "Selected vendors",
+    "notes": "Internal notes",
+    "save": "Save",
+    "saved": "Saved",
+    "status": "Status",
+    "back": "All requests",
+    "date": "Date",
+    "guests": "Guests",
+    "city": "City",
+    "view": "Open"
+  }
+}
