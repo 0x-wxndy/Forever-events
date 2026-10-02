@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 import { isAdminAuthed } from "@/lib/admin-auth";
 import { updateRequest, type RequestStatus } from "@/lib/inbox";
 
-const statuses: RequestStatus[] = ["new", "contacted", "confirmed", "closed"];
+const statuses: RequestStatus[] = ["new", "inProgress", "contacted", "confirmed"];
 
 export async function PATCH(
   request: Request,

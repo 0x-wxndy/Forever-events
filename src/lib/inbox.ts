@@ -1,7 +1,7 @@
 import { mkdir, readFile, writeFile } from "fs/promises";
 import path from "path";
 
-export type RequestStatus = "new" | "contacted" | "confirmed" | "closed";
+export type RequestStatus = "new" | "inProgress" | "contacted" | "confirmed";
 
 export type RequestVendor = {
   vendorSlug: string;
@@ -21,6 +21,7 @@ export type EventRequest = {
   guests?: string;
   message?: string;
   citySlug?: string;
+  budget?: string;
   vendors: RequestVendor[];
   status: RequestStatus;
   notes?: string;
@@ -56,10 +57,19 @@ async function writeList<T>(file: string, items: T[]) {
 }
 
 function withStatus(item: EventRequest): EventRequest {
+  const raw = String(item.status || "new");
+  const status: RequestStatus =
+    raw === "closed" || raw === "inProgress"
+      ? raw === "closed"
+        ? "inProgress"
+        : "inProgress"
+      : raw === "contacted" || raw === "confirmed"
+        ? raw
+        : "new";
   return {
     ...item,
     vendors: item.vendors ?? [],
-    status: item.status ?? "new",
+    status,
   };
 }
 

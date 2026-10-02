@@ -105,6 +105,19 @@ body {
   animation: twinkle 3.6s ease-in-out infinite;
 }
 
+.field-input {
+  width: 100%;
+  border-radius: 0.9rem;
+  border: 1px solid rgba(201, 120, 144, 0.22);
+  background: #fffaf8;
+  padding: 0.7rem 1rem;
+  outline: none;
+}
+
+.field-input:focus {
+  border-color: #c97890;
+}
+
 @keyframes twinkle {
   0%,
   100% {

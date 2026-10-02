@@ -14,3 +14,14 @@ export function localized<T extends { fr: string; en: string }>(
 ) {
   return value[locale];
 }
+
+export function formatEventDate(value: string, locale: Locale) {
+  if (!value) return "—";
+  const date = new Date(`${value}T12:00:00`);
+  if (Number.isNaN(date.getTime())) return value;
+  return new Intl.DateTimeFormat(locale === "fr" ? "fr-DZ" : "en-GB", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(date);
+}

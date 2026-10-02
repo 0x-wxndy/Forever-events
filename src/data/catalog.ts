@@ -35,15 +35,16 @@ export type Vendor = {
 
 export const cities: City[] = [
   { slug: "oran", name: { fr: "Oran", en: "Oran" }, available: true },
+  { slug: "alger", name: { fr: "Alger", en: "Algiers" }, available: true },
   {
-    slug: "alger",
-    name: { fr: "Alger", en: "Algiers" },
-    available: false,
+    slug: "mostaganem",
+    name: { fr: "Mostaganem", en: "Mostaganem" },
+    available: true,
   },
   {
     slug: "constantine",
     name: { fr: "Constantine", en: "Constantine" },
-    available: false,
+    available: true,
   },
 ];
 
@@ -119,13 +120,13 @@ export const services: Service[] = [
 export const vendors: Vendor[] = [
   {
     slug: "atelier-nour",
-    name: "Atelier Nour",
+    name: "Moments Studio",
     serviceSlug: "photographers",
     citySlug: "oran",
     startingPrice: 45000,
     bio: {
-      fr: "Photographie de mariage douce et lumineuse, entre portraits intimes et grands moments de fête.",
-      en: "Soft, luminous wedding photography, from intimate portraits to the big celebration moments.",
+      fr: "Une photographie naturelle, émotionnelle et intemporelle pour vos plus beaux moments.",
+      en: "Natural, emotional and timeless photography for your special moments.",
     },
     coverImage: "/images/photographers.jpg",
     gallery: [
@@ -154,13 +155,13 @@ export const vendors: Vendor[] = [
   },
   {
     slug: "lumiere-doran",
-    name: "Lumière d’Oran",
+    name: "Golden Frames",
     serviceSlug: "photographers",
     citySlug: "oran",
     startingPrice: 55000,
     bio: {
-      fr: "Un regard cinématographique sur vos célébrations, avec une lumière chaude et des images intemporelles.",
-      en: "A cinematic eye on your celebration, with warm light and timeless images.",
+      fr: "Transformer vos instants en œuvres d’art.",
+      en: "Turning your moments into works of art.",
     },
     coverImage: "/images/vendor-photo-1.jpg",
     gallery: [
@@ -180,8 +181,54 @@ export const vendors: Vendor[] = [
     ],
   },
   {
+    slug: "pure-shots",
+    name: "Pure Shots",
+    serviceSlug: "photographers",
+    citySlug: "oran",
+    startingPrice: 48000,
+    bio: {
+      fr: "Élégant. Naturel. Inoubliable.",
+      en: "Elegant. Natural. Unforgettable.",
+    },
+    coverImage: "/images/vendor-photo-2.jpg",
+    gallery: ["/images/vendor-photo-2.jpg", "/images/photographers.jpg", "/images/about-bride.jpg"],
+    packages: [
+      {
+        name: { fr: "Romance", en: "Romance" },
+        startingPrice: 48000,
+        details: {
+          fr: "Portraits, cérémonie et une galerie en ligne.",
+          en: "Portraits, ceremony coverage and an online gallery.",
+        },
+      },
+    ],
+  },
+  {
+    slug: "eternal-captures",
+    name: "Eternal Captures",
+    serviceSlug: "photographers",
+    citySlug: "oran",
+    startingPrice: 52000,
+    bio: {
+      fr: "Capturer les petits détails qui font les grands souvenirs.",
+      en: "Capturing the little details that make big memories.",
+    },
+    coverImage: "/images/about-bride.jpg",
+    gallery: ["/images/about-bride.jpg", "/images/photographers.jpg", "/images/vendor-photo-1.jpg"],
+    packages: [
+      {
+        name: { fr: "Détails", en: "Details" },
+        startingPrice: 52000,
+        details: {
+          fr: "Reportage sensible, du getting ready jusqu’à la soirée.",
+          en: "A sensitive reportage, from getting ready to the last toast.",
+        },
+      },
+    ],
+  },
+  {
     slug: "yasmina-atelier",
-    name: "Yasmina Atelier",
+    name: "Dream Decor",
     serviceSlug: "decorators",
     citySlug: "oran",
     startingPrice: 80000,
@@ -285,7 +332,7 @@ export const vendors: Vendor[] = [
   },
   {
     slug: "dj-amine",
-    name: "DJ Amine",
+    name: "Beats & Beyond",
     serviceSlug: "djs",
     citySlug: "oran",
     startingPrice: 35000,
@@ -427,7 +474,7 @@ export const eventTypes: { slug: string; name: Localized }[] = [
   { slug: "wedding", name: { fr: "Mariage", en: "Wedding" } },
   { slug: "engagement", name: { fr: "Fiançailles", en: "Engagement" } },
   { slug: "henna", name: { fr: "Henné", en: "Henna" } },
-  { slug: "birthday", name: { fr: "Anniversaire", en: "Birthday" } },
+  { slug: "birthday", name: { fr: "Anniversaire", en: "Birthday Party" } },
   { slug: "other", name: { fr: "Autre célébration", en: "Other celebration" } },
 ];
 

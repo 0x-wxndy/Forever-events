@@ -2,6 +2,7 @@
 
 import { usePathname } from "@/i18n/navigation";
 import { EventDock } from "@/components/event/EventDock";
+import { AddedToEventModal } from "@/components/event/AddedToEventModal";
 import { Footer } from "@/components/layout/Footer";
 import { Header } from "@/components/layout/Header";
 
@@ -13,12 +14,18 @@ export function SiteChrome({ children }: { children: React.ReactNode }) {
     return <main>{children}</main>;
   }
 
+  const hideDock =
+    pathname === "/create" ||
+    pathname.startsWith("/create/") ||
+    pathname.includes("/confirmation");
+
   return (
     <>
       <Header />
       <main>{children}</main>
       <Footer />
-      <EventDock />
+      {!hideDock && <EventDock />}
+      <AddedToEventModal />
     </>
   );
 }

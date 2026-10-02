@@ -1,12 +1,12 @@
-import { CreateEventForm } from "@/components/event/CreateEventForm";
+import { EventReview } from "@/components/event/EventReview";
 import { setRequestLocale } from "next-intl/server";
 
-export default async function CreatePage({
+export default async function ReviewPage({
   params,
 }: {
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
   setRequestLocale(locale);
-  return <CreateEventForm />;
+  return <EventReview />;
 }

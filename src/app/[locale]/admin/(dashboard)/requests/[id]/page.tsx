@@ -56,6 +56,8 @@ export default async function AdminRequestDetailPage({
             <br />
             {t("date")}: {item.eventDate || "—"}
             <br />
+            {t("budget")}: {item.budget || "—"}
+            <br />
             {t("guests")}: {item.guests || "—"}
           </p>
           {item.message && <p className="mt-4 text-sm text-ink">{item.message}</p>}

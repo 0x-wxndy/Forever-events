@@ -5,7 +5,7 @@ import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import type { RequestStatus } from "@/lib/inbox";
 
-const statuses: RequestStatus[] = ["new", "contacted", "confirmed", "closed"];
+const statuses: RequestStatus[] = ["new", "inProgress", "contacted", "confirmed"];
 
 export function RequestActions({
   id,

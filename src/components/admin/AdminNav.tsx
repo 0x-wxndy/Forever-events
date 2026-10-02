@@ -1,17 +1,24 @@
 "use client";
 
+import {
+  ClipboardList,
+  Home,
+  LogOut,
+  Mail,
+  Store,
+} from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Link, usePathname, useRouter } from "@/i18n/navigation";
 import { cn } from "@/lib/cn";
 
 const links = [
-  { href: "/admin", key: "overview" },
-  { href: "/admin/requests", key: "requests" },
-  { href: "/admin/messages", key: "messages" },
-  { href: "/admin/vendors", key: "vendors" },
+  { href: "/admin", key: "overview", icon: Home },
+  { href: "/admin/requests", key: "requests", icon: ClipboardList },
+  { href: "/admin/vendors", key: "vendors", icon: Store },
+  { href: "/admin/messages", key: "messages", icon: Mail },
 ] as const;
 
-export function AdminNav() {
+export function AdminNav({ incoming = 0 }: { incoming?: number }) {
   const t = useTranslations("admin");
   const pathname = usePathname();
   const router = useRouter();
@@ -22,40 +29,41 @@ export function AdminNav() {
   }
 
   return (
-    <header className="border-b border-rose/15 bg-white/80 backdrop-blur">
-      <div className="mx-auto flex max-w-6xl flex-wrap items-center justify-between gap-4 px-5 py-4">
-        <Link href="/admin" className="font-script text-3xl text-[#7a5346]">
-          Forever <span className="text-rose-deep">♥</span>
-        </Link>
-        <nav className="flex flex-wrap items-center gap-4 text-sm">
-          {links.map((link) => {
-            const active =
-              link.href === "/admin"
-                ? pathname === "/admin"
-                : pathname.startsWith(link.href);
-            return (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  "transition hover:text-dusty",
-                  active && "font-medium text-rose-deep",
-                )}
-              >
+    <aside className="rounded-[1.8rem] bg-gradient-to-b from-[#8d5a63] to-[#5f3d45] p-5 text-white shadow-soft">
+      <nav className="grid gap-1 text-sm">
+        {links.map((link) => {
+          const active =
+            link.href === "/admin" ? pathname === "/admin" : pathname.startsWith(link.href);
+          return (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={cn(
+                "flex items-center justify-between rounded-full px-4 py-2.5 transition",
+                active ? "bg-white/20" : "hover:bg-white/10",
+              )}
+            >
+              <span className="inline-flex items-center gap-2">
+                <link.icon className="h-4 w-4" />
                 {t(link.key)}
-              </Link>
-            );
-          })}
-        </nav>
-        <div className="flex items-center gap-3 text-sm">
-          <Link href="/" className="text-muted hover:text-ink">
-            {t("openSite")}
-          </Link>
-          <button type="button" onClick={logout} className="text-dusty">
-            {t("signOut")}
-          </button>
-        </div>
-      </div>
-    </header>
+              </span>
+              {link.key === "requests" && incoming > 0 && (
+                <span className="grid h-5 min-w-5 place-items-center rounded-full bg-rose-deep px-1.5 text-[11px]">
+                  {incoming}
+                </span>
+              )}
+            </Link>
+          );
+        })}
+        <button
+          type="button"
+          onClick={logout}
+          className="mt-4 inline-flex items-center gap-2 rounded-full px-4 py-2.5 text-left hover:bg-white/10"
+        >
+          <LogOut className="h-4 w-4" />
+          {t("signOut")}
+        </button>
+      </nav>
+    </aside>
   );
 }

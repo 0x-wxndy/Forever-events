@@ -1,12 +1,12 @@
-import { Crown, Gem, Users } from "lucide-react";
+import { Gift, Award, Crown } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 
 export async function TrustBar() {
   const t = await getTranslations("trust");
 
   const items = [
-    { icon: Gem, title: t("personalized"), text: t("personalizedText") },
-    { icon: Users, title: t("vendors"), text: t("vendorsText") },
+    { icon: Gift, title: t("personalized"), text: t("personalizedText") },
+    { icon: Award, title: t("vendors"), text: t("vendorsText") },
     { icon: Crown, title: t("moments"), text: t("momentsText") },
   ];
 
