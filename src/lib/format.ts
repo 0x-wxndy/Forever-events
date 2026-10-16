@@ -15,6 +15,10 @@ export function localized<T extends { fr: string; en: string }>(
   return value[locale];
 }
 
+export function eventDisplayId(id: string) {
+  return `FE-${id.replace(/-/g, "").slice(0, 8).toUpperCase()}`;
+}
+
 export function formatEventDate(value: string, locale: Locale) {
   if (!value) return "—";
   const date = new Date(`${value}T12:00:00`);

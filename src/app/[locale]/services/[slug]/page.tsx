@@ -1,7 +1,7 @@
 import { VendorCard } from "@/components/vendors/VendorCard";
 import { PageHero } from "@/components/ui/PageHero";
-import { getService, vendorsFor } from "@/data/catalog";
 import { localized } from "@/lib/format";
+import { readCatalog } from "@/lib/catalog-store";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { getLocale, getTranslations, setRequestLocale } from "next-intl/server";
@@ -14,12 +14,13 @@ export default async function ServiceDetailPage({
 }) {
   const { locale, slug } = await params;
   setRequestLocale(locale);
-  const service = getService(slug);
+  const catalog = await readCatalog();
+  const service = catalog.services.find((item) => item.slug === slug);
   if (!service) notFound();
 
   const currentLocale = (await getLocale()) as Locale;
   const t = await getTranslations("service");
-  const list = vendorsFor(service.slug, "oran");
+  const list = catalog.vendors.filter((vendor) => vendor.serviceSlug === service.slug);
 
   return (
     <>
@@ -46,7 +47,7 @@ export default async function ServiceDetailPage({
         ) : (
           <div className="grid gap-6 md:grid-cols-2">
             {list.map((vendor) => (
-              <VendorCard key={vendor.slug} vendor={vendor} />
+              <VendorCard key={vendor.slug} vendor={vendor} service={service} />
             ))}
           </div>
         )}

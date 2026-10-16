@@ -1,4 +1,4 @@
-import { cities, eventTypes, getService, getVendor } from "@/data/catalog";
+import { cities, eventTypes, getService, getVendor, type Service, type Vendor } from "@/data/catalog";
 import { localized } from "@/lib/format";
 import type { Locale } from "@/i18n/routing";
 
@@ -22,11 +22,11 @@ export function cityLabel(slug: string | undefined, locale: Locale) {
   return found ? localized(found.name, locale) : slug || "—";
 }
 
-export function vendorLabel(slug: string) {
-  return getVendor(slug)?.name || slug;
+export function vendorLabel(slug: string, vendors?: Vendor[]) {
+  return vendors?.find((item) => item.slug === slug)?.name || getVendor(slug)?.name || slug;
 }
 
-export function serviceLabel(slug: string, locale: Locale) {
-  const found = getService(slug);
+export function serviceLabel(slug: string, locale: Locale, services?: Service[]) {
+  const found = services?.find((item) => item.slug === slug) || getService(slug);
   return found ? localized(found.name, locale) : slug;
 }

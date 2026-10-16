@@ -1,6 +1,6 @@
 import { PageHero } from "@/components/ui/PageHero";
-import { services } from "@/data/catalog";
 import { localized } from "@/lib/format";
+import { readCatalog } from "@/lib/catalog-store";
 import { Link } from "@/i18n/navigation";
 import { getTranslations, setRequestLocale } from "next-intl/server";
 import Image from "next/image";
@@ -15,6 +15,7 @@ export default async function ServicesPage({
   setRequestLocale(locale);
   const t = await getTranslations("servicesPage");
   const currentLocale = locale as Locale;
+  const { services } = await readCatalog();
 
   return (
     <>

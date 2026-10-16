@@ -1,6 +1,7 @@
 import { AddToEventButton } from "@/components/event/AddToEventButton";
-import { getService, getVendor } from "@/data/catalog";
+import { FlowBack } from "@/components/event/FlowBack";
 import { formatPrice, localized } from "@/lib/format";
+import { readCatalog } from "@/lib/catalog-store";
 import { Link } from "@/i18n/navigation";
 import type { Locale } from "@/i18n/routing";
 import { getLocale, getTranslations, setRequestLocale } from "next-intl/server";
@@ -9,18 +10,23 @@ import { notFound } from "next/navigation";
 
 export default async function VendorPage({
   params,
+  searchParams,
 }: {
   params: Promise<{ locale: string; slug: string }>;
+  searchParams: Promise<{ from?: string }>;
 }) {
   const { locale, slug } = await params;
+  const { from } = await searchParams;
   setRequestLocale(locale);
-  const vendor = getVendor(slug);
+  const catalog = await readCatalog();
+  const vendor = catalog.vendors.find((item) => item.slug === slug);
   if (!vendor) notFound();
 
   const currentLocale = (await getLocale()) as Locale;
   const t = await getTranslations("vendor");
   const serviceT = await getTranslations("service");
-  const service = getService(vendor.serviceSlug);
+  const service = catalog.services.find((item) => item.slug === vendor.serviceSlug);
+  const fromBrowse = from === "browse";
 
   return (
     <article className="pt-28">
@@ -37,24 +43,40 @@ export default async function VendorPage({
 
       <div className="mx-auto max-w-5xl px-5 py-12">
         <nav className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-dusty">
-          <Link href="/services" className="hover:text-rose-deep">
-            ← {serviceT("backToServices")}
-          </Link>
-          <span className="text-rose/50">/</span>
-          <Link href={`/services/${vendor.serviceSlug}`} className="hover:text-rose-deep">
-            {t("back")}
-          </Link>
+          {fromBrowse ? (
+            <FlowBack href="/my-event/browse" />
+          ) : (
+            <>
+              <Link href="/services" className="hover:text-rose-deep">
+                ← {serviceT("backToServices")}
+              </Link>
+              <span className="text-rose/50">/</span>
+              <Link href={`/services/${vendor.serviceSlug}`} className="hover:text-rose-deep">
+                {t("back")}
+              </Link>
+            </>
+          )}
         </nav>
         <p className="mt-4 text-xs uppercase tracking-[0.22em] text-muted">
           {service ? localized(service.name, currentLocale) : vendor.serviceSlug} · Oran
         </p>
         <div className="mt-2 flex flex-wrap items-end justify-between gap-4">
           <h1 className="font-serif text-4xl text-ink md:text-5xl">{vendor.name}</h1>
-          <AddToEventButton
-            vendorSlug={vendor.slug}
-            serviceSlug={vendor.serviceSlug}
-            citySlug={vendor.citySlug}
-          />
+          <div className="flex flex-wrap items-center gap-3">
+            <AddToEventButton
+              vendorSlug={vendor.slug}
+              serviceSlug={vendor.serviceSlug}
+              citySlug={vendor.citySlug}
+            />
+            {fromBrowse && (
+              <Link
+                href="/my-event/browse"
+                className="text-sm text-dusty hover:text-rose-deep"
+              >
+                {t("addAnother")}
+              </Link>
+            )}
+          </div>
         </div>
         <p className="mt-4 max-w-2xl text-sm leading-7 text-muted">
           {localized(vendor.bio, currentLocale)}

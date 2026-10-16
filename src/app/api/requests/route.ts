@@ -1,5 +1,10 @@
 import { NextResponse } from "next/server";
 import { saveRequest } from "@/lib/inbox";
+import { sendFicheEmail } from "@/lib/fiche-email";
+import { eventDisplayId } from "@/lib/format";
+import { siteContact } from "@/lib/site-contact";
+import { getCity, eventTypes } from "@/data/catalog";
+import { readCatalog } from "@/lib/catalog-store";
 
 export async function POST(request: Request) {
   const body = await request.json();
@@ -8,8 +13,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: false }, { status: 400 });
   }
 
+  const id = crypto.randomUUID();
+  const locale = body.locale === "en" ? "en" : "fr";
+
   await saveRequest({
-    id: crypto.randomUUID(),
+    id,
     type: "event-request",
     createdAt: new Date().toISOString(),
     name: String(body.name),
@@ -25,5 +33,40 @@ export async function POST(request: Request) {
     status: "new",
   });
 
-  return NextResponse.json({ ok: true });
+  const displayId = eventDisplayId(id);
+  const catalog = await readCatalog();
+  const city = getCity(String(body.citySlug || ""));
+  const type = eventTypes.find((item) => item.slug === body.eventType);
+  const origin = request.headers.get("origin") || siteContact.siteUrl;
+  const ficheUrl = `${origin}/${locale === "en" ? "en/" : ""}my-event/events/${id}`;
+
+  let emailed = false;
+  if (body.email) {
+    try {
+      emailed = await sendFicheEmail({
+        to: String(body.email),
+        locale,
+        displayId,
+        name: String(body.name),
+        phone: String(body.phone),
+        eventType: type ? type.name[locale] : String(body.eventType || "—"),
+        eventDate: String(body.eventDate || "—"),
+        city: city ? city.name[locale] : String(body.citySlug || "—"),
+        guests: String(body.guests || ""),
+        budget: String(body.budget || ""),
+        notes: String(body.message || ""),
+        vendors: body.vendors.map((item: { vendorSlug: string; serviceSlug: string }) => ({
+          name: catalog.vendors.find((entry) => entry.slug === item.vendorSlug)?.name || item.vendorSlug,
+          service:
+            catalog.services.find((entry) => entry.slug === item.serviceSlug)?.name[locale] ||
+            item.serviceSlug,
+        })),
+        ficheUrl,
+      });
+    } catch {
+      emailed = false;
+    }
+  }
+
+  return NextResponse.json({ ok: true, id, displayId, emailed });
 }

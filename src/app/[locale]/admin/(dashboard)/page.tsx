@@ -1,5 +1,6 @@
 import { getLocale, getTranslations } from "next-intl/server";
 import { Link } from "@/i18n/navigation";
+import { readCatalog } from "@/lib/catalog-store";
 import { listContacts, listRequests } from "@/lib/inbox";
 import type { Locale } from "@/i18n/routing";
 import { formatAdminDate } from "@/lib/admin-format";
@@ -9,18 +10,20 @@ export default async function AdminHomePage() {
   const locale = (await getLocale()) as Locale;
   const requests = await listRequests();
   const contacts = await listContacts();
+  const catalog = await readCatalog();
   const incoming = requests.filter((item) => item.status === "new").length;
 
   const cards = [
     { label: t("requests"), value: requests.length, href: "/admin/requests" },
     { label: t("new"), value: incoming, href: "/admin/requests" },
     { label: t("messages"), value: contacts.length, href: "/admin/messages" },
+    { label: t("vendors"), value: catalog.vendors.length, href: "/admin/vendors" },
   ];
 
   return (
     <div>
       <h1 className="font-serif text-4xl text-ink">{t("overview")}</h1>
-      <div className="mt-8 grid gap-4 sm:grid-cols-3">
+      <div className="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {cards.map((card) => (
           <Link
             key={card.label}

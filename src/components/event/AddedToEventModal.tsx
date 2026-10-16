@@ -4,7 +4,8 @@ import { CalendarDays, Heart, MapPin, Sparkles, X } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
-import { getCity, getService, getVendor } from "@/data/catalog";
+import { useLiveService, useLiveVendor } from "@/components/catalog/CatalogProvider";
+import { getCity } from "@/data/catalog";
 import { localized } from "@/lib/format";
 import type { Locale } from "@/i18n/routing";
 import { useEventStore } from "@/store/event-store";
@@ -14,13 +15,12 @@ export function AddedToEventModal() {
   const locale = useLocale() as Locale;
   const lastAdded = useEventStore((state) => state.lastAdded);
   const clearLastAdded = useEventStore((state) => state.clearLastAdded);
+  const vendor = useLiveVendor(lastAdded?.vendorSlug);
+  const service = useLiveService(lastAdded?.serviceSlug);
 
-  if (!lastAdded) return null;
+  if (!lastAdded || !vendor) return null;
 
-  const vendor = getVendor(lastAdded.vendorSlug);
-  const service = getService(lastAdded.serviceSlug);
   const city = getCity(lastAdded.citySlug);
-  if (!vendor) return null;
 
   return (
     <div className="fixed inset-0 z-[60] grid place-items-center bg-[#4a3538]/25 px-4 backdrop-blur-[3px]">

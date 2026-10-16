@@ -7,7 +7,8 @@ import { FormEvent, useState } from "react";
 import { EventStepper } from "@/components/event/EventStepper";
 import { FloralScreen } from "@/components/event/FloralScreen";
 import { RequireEventDetails } from "@/components/event/RequireEventDetails";
-import { cities, eventTypes, getCity, getService, getVendor } from "@/data/catalog";
+import { useCatalog } from "@/components/catalog/CatalogProvider";
+import { cities, eventTypes, getCity } from "@/data/catalog";
 import { formatEventDate, localized } from "@/lib/format";
 import type { Locale } from "@/i18n/routing";
 import { Link, useRouter } from "@/i18n/navigation";
@@ -29,9 +30,10 @@ function ReviewBody() {
   const setDetails = useEventStore((state) => state.setDetails);
   const selections = useEventStore((state) => state.selections);
   const removeVendor = useEventStore((state) => state.removeVendor);
-  const markSubmitted = useEventStore((state) => state.markSubmitted);
+  const saveSubmitted = useEventStore((state) => state.saveSubmitted);
   const [pending, setPending] = useState(false);
   const [error, setError] = useState(false);
+  const { services, vendors } = useCatalog();
 
   async function onSubmit(event: FormEvent) {
     event.preventDefault();
@@ -53,14 +55,20 @@ function ReviewBody() {
           budget: details.budget,
           message: details.notes,
           vendors: selections,
+          locale,
         }),
       });
       if (!response.ok) {
         setError(true);
         return;
       }
-      markSubmitted();
-      router.push("/my-event/confirmation");
+      const payload = (await response.json()) as { id?: string };
+      if (!payload.id) {
+        setError(true);
+        return;
+      }
+      saveSubmitted(payload.id);
+      router.push(`/my-event/events/${payload.id}`);
     } catch {
       setError(true);
     } finally {
@@ -98,8 +106,8 @@ function ReviewBody() {
           <div className="mt-4 divide-y divide-rose/10">
             {selections.length === 0 && <p className="py-6 text-sm text-muted">{t("emptyCart")}</p>}
             {selections.map((item) => {
-              const vendor = getVendor(item.vendorSlug);
-              const service = getService(item.serviceSlug);
+              const vendor = vendors.find((entry) => entry.slug === item.vendorSlug);
+              const service = services.find((entry) => entry.slug === item.serviceSlug);
               const vendorCity = getCity(item.citySlug);
               if (!vendor) return null;
               return (
@@ -157,6 +165,15 @@ function ReviewBody() {
                   </option>
                 ))}
               </select>
+            </Row>
+            <Row label={t("email")}>
+              <input
+                type="email"
+                value={details.email}
+                onChange={(event) => setDetails({ email: event.target.value })}
+                placeholder={t("emailPlaceholder")}
+                className="field-input py-1.5"
+              />
             </Row>
             <Row label={t("date")} value={formatEventDate(details.eventDate, locale)} />
             <Row

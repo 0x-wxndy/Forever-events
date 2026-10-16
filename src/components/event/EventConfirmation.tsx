@@ -12,6 +12,7 @@ export function EventConfirmation() {
   const t = useTranslations("flow");
   const hydrated = useHasHydrated();
   const submitted = useEventStore((state) => state.submitted);
+  const lastSubmittedId = useEventStore((state) => state.lastSubmittedId);
   const router = useRouter();
 
   useEffect(() => {
@@ -40,10 +41,18 @@ export function EventConfirmation() {
         <h1 className="font-script text-5xl text-dusty">{t("confirmTitle")}</h1>
         <p className="mt-3 text-sm leading-7 text-muted">{t("confirmBody")}</p>
         <div className="mt-8 flex flex-wrap justify-center gap-3">
-          <Link href="/my-event" className="rounded-full bg-rose-deep px-5 py-2.5 text-sm text-white">
+          {lastSubmittedId && (
+            <Link
+              href={`/my-event/events/${lastSubmittedId}`}
+              className="rounded-full bg-rose-deep px-5 py-2.5 text-sm text-white"
+            >
+              {t("ficheTitle")}
+            </Link>
+          )}
+          <Link href="/my-event" className="rounded-full border border-rose/30 px-5 py-2.5 text-sm text-dusty">
             {t("dashboard")}
           </Link>
-          <Link href="/" className="rounded-full border border-rose/30 px-5 py-2.5 text-sm text-dusty">
+          <Link href="/" className="rounded-full px-5 py-2.5 text-sm text-muted">
             {t("backHome")}
           </Link>
         </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import { CalendarDays, MapPin, Phone, Sparkles, User } from "lucide-react";
+import { CalendarDays, Mail, MapPin, Phone, Sparkles, User } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import { FormEvent } from "react";
 import { cities, eventTypes } from "@/data/catalog";
@@ -25,6 +25,7 @@ export function CreateEventForm() {
     startEvent({
       name: String(form.get("name") || "").trim(),
       phone: String(form.get("phone") || "").trim(),
+      email: String(form.get("email") || "").trim(),
       citySlug: String(form.get("citySlug") || "oran"),
       eventDate: String(form.get("eventDate") || ""),
       eventType: String(form.get("eventType") || ""),
@@ -69,6 +70,15 @@ export function CreateEventForm() {
               name="phone"
               defaultValue={details.phone}
               placeholder={t("phonePlaceholder")}
+              className="field-input"
+            />
+          </Field>
+          <Field icon={Mail} label={t("email")}>
+            <input
+              type="email"
+              name="email"
+              defaultValue={details.email}
+              placeholder={t("emailPlaceholder")}
               className="field-input"
             />
           </Field>

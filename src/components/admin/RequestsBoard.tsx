@@ -1,10 +1,13 @@
 "use client";
 
-import { Check, Eye, Phone, Search, Users } from "lucide-react";
+import { Check, Eye, Phone, Search, SlidersHorizontal, Users, X } from "lucide-react";
 import Image from "next/image";
 import { useMemo, useState } from "react";
-import { useTranslations } from "next-intl";
+import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
+import { cities, eventTypes } from "@/data/catalog";
+import { localized } from "@/lib/format";
+import type { Locale } from "@/i18n/routing";
 import { cn } from "@/lib/cn";
 
 export type RequestRow = {
@@ -12,12 +15,35 @@ export type RequestRow = {
   name: string;
   phone: string;
   city: string;
+  citySlug: string;
   date: string;
+  eventDate: string;
   eventType: string;
+  eventTypeSlug: string;
   budget: string;
   status: "new" | "inProgress" | "contacted" | "confirmed";
   vendors: { slug: string; name: string; image: string }[];
 };
+
+const statuses = ["new", "inProgress", "contacted", "confirmed"] as const;
+const whenOptions = ["all", "upcoming", "thisMonth", "past"] as const;
+
+function startOfToday() {
+  const date = new Date();
+  date.setHours(0, 0, 0, 0);
+  return date;
+}
+
+function matchesWhen(eventDate: string, when: (typeof whenOptions)[number]) {
+  if (when === "all") return true;
+  if (!eventDate) return false;
+  const date = new Date(eventDate);
+  if (Number.isNaN(date.getTime())) return false;
+  const today = startOfToday();
+  if (when === "upcoming") return date >= today;
+  if (when === "past") return date < today;
+  return date.getMonth() === today.getMonth() && date.getFullYear() === today.getFullYear();
+}
 
 export function RequestsBoard({
   rows,
@@ -27,22 +53,54 @@ export function RequestsBoard({
   vendorCount: number;
 }) {
   const t = useTranslations("admin");
+  const locale = useLocale() as Locale;
   const [query, setQuery] = useState("");
+  const [status, setStatus] = useState<"" | (typeof statuses)[number]>("");
+  const [city, setCity] = useState("");
+  const [eventType, setEventType] = useState("");
+  const [when, setWhen] = useState<(typeof whenOptions)[number]>("all");
+
+  const counts = useMemo(() => {
+    return {
+      all: rows.length,
+      new: rows.filter((item) => item.status === "new").length,
+      inProgress: rows.filter((item) => item.status === "inProgress").length,
+      contacted: rows.filter((item) => item.status === "contacted").length,
+      confirmed: rows.filter((item) => item.status === "confirmed").length,
+    };
+  }, [rows]);
 
   const filtered = useMemo(() => {
     const needle = query.trim().toLowerCase();
-    if (!needle) return rows;
-    return rows.filter((row) =>
-      [row.name, row.phone, row.city, row.eventType, row.budget]
+    return rows.filter((row) => {
+      if (status && row.status !== status) return false;
+      if (city && row.citySlug !== city) return false;
+      if (eventType && row.eventTypeSlug !== eventType) return false;
+      if (!matchesWhen(row.eventDate, when)) return false;
+      if (!needle) return true;
+      return [
+        row.name,
+        row.phone,
+        row.city,
+        row.eventType,
+        row.budget,
+        ...row.vendors.map((vendor) => vendor.name),
+      ]
         .join(" ")
         .toLowerCase()
-        .includes(needle),
-    );
-  }, [query, rows]);
+        .includes(needle);
+    });
+  }, [city, eventType, query, rows, status, when]);
 
-  const incoming = rows.filter((item) => item.status === "new").length;
-  const progress = rows.filter((item) => item.status === "inProgress").length;
-  const confirmed = rows.filter((item) => item.status === "confirmed").length;
+  const activeFilters = Boolean(status || city || eventType || when !== "all" || query.trim());
+
+  function clearFilters() {
+    setQuery("");
+    setStatus("");
+    setCity("");
+    setEventType("");
+    setWhen("all");
+  }
 
   return (
     <div>
@@ -51,15 +109,80 @@ export function RequestsBoard({
           <h1 className="font-serif text-4xl text-ink">{t("requests")}</h1>
           <p className="text-sm text-muted">{t("manageRequests")}</p>
         </div>
-        <label className="relative min-w-[16rem] flex-1 md:max-w-sm">
-          <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
-          <input
-            value={query}
-            onChange={(event) => setQuery(event.target.value)}
-            placeholder={t("searchEvents")}
-            className="field-input pl-10"
-          />
-        </label>
+        <p className="text-sm text-dusty">
+          {t("resultsCount", { shown: filtered.length, total: rows.length })}
+        </p>
+      </div>
+
+      <div className="mt-5 rounded-[1.6rem] bg-white/90 p-4 shadow-soft">
+        <div className="flex flex-wrap items-center gap-2">
+          <SlidersHorizontal className="h-4 w-4 text-muted" />
+          <span className="text-xs uppercase tracking-[0.16em] text-muted">{t("filters")}</span>
+        </div>
+
+        <div className="mt-3 flex flex-wrap gap-2">
+          <FilterChip active={!status} onClick={() => setStatus("")}>
+            {t("allStatuses")} ({counts.all})
+          </FilterChip>
+          {statuses.map((item) => (
+            <FilterChip key={item} active={status === item} tone={item} onClick={() => setStatus(item)}>
+              {t(item)} ({counts[item]})
+            </FilterChip>
+          ))}
+        </div>
+
+        <div className="mt-3 flex flex-col gap-3 md:flex-row">
+          <label className="relative flex-1">
+            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted" />
+            <input
+              value={query}
+              onChange={(event) => setQuery(event.target.value)}
+              placeholder={t("searchEvents")}
+              className="field-input pl-10"
+            />
+          </label>
+          <select value={city} onChange={(event) => setCity(event.target.value)} className="field-input md:w-44">
+            <option value="">{t("allCities")}</option>
+            {cities.map((item) => (
+              <option key={item.slug} value={item.slug}>
+                {localized(item.name, locale)}
+              </option>
+            ))}
+          </select>
+          <select
+            value={eventType}
+            onChange={(event) => setEventType(event.target.value)}
+            className="field-input md:w-48"
+          >
+            <option value="">{t("allEventTypes")}</option>
+            {eventTypes.map((item) => (
+              <option key={item.slug} value={item.slug}>
+                {localized(item.name, locale)}
+              </option>
+            ))}
+          </select>
+          <select
+            value={when}
+            onChange={(event) => setWhen(event.target.value as (typeof whenOptions)[number])}
+            className="field-input md:w-44"
+          >
+            {whenOptions.map((item) => (
+              <option key={item} value={item}>
+                {t(item === "all" ? "allDates" : item)}
+              </option>
+            ))}
+          </select>
+          {activeFilters && (
+            <button
+              type="button"
+              onClick={clearFilters}
+              className="inline-flex items-center justify-center gap-1 rounded-full px-3 py-2 text-sm text-rose-deep"
+            >
+              <X className="h-4 w-4" />
+              {t("clearFilters")}
+            </button>
+          )}
+        </div>
       </div>
 
       <div className="mt-6 overflow-x-auto rounded-[1.6rem] bg-white/90 shadow-soft">
@@ -82,7 +205,7 @@ export function RequestsBoard({
             {filtered.length === 0 && (
               <tr>
                 <td colSpan={10} className="px-4 py-8 text-muted">
-                  {t("emptyRequests")}
+                  {rows.length === 0 ? t("emptyRequests") : t("emptyFiltered")}
                 </td>
               </tr>
             )}
@@ -119,7 +242,9 @@ export function RequestsBoard({
                   </span>
                 </td>
                 <td className="px-4 py-3">
-                  <span
+                  <button
+                    type="button"
+                    onClick={() => setStatus(item.status)}
                     className={cn(
                       "rounded-full px-2.5 py-1 text-xs",
                       item.status === "new" && "bg-rose/20 text-dusty",
@@ -129,7 +254,7 @@ export function RequestsBoard({
                     )}
                   >
                     {t(item.status)}
-                  </span>
+                  </button>
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2 text-dusty">
@@ -151,10 +276,25 @@ export function RequestsBoard({
         <Stat
           label={t("totalRequests")}
           value={rows.length}
-          extra={`${incoming} ${t("new")}`}
+          extra={`${counts.new} ${t("new")}`}
+          active={!status}
+          onClick={() => setStatus("")}
         />
-        <Stat label={t("inProgress")} value={progress} extra={`${incoming} ${t("newToday")}`} />
-        <Stat label={t("confirmed")} value={confirmed} extra={t("thisWeek")} icon="check" />
+        <Stat
+          label={t("inProgress")}
+          value={counts.inProgress}
+          extra={`${counts.new} ${t("new")}`}
+          active={status === "inProgress"}
+          onClick={() => setStatus("inProgress")}
+        />
+        <Stat
+          label={t("confirmed")}
+          value={counts.confirmed}
+          extra={t("thisWeek")}
+          icon="check"
+          active={status === "confirmed"}
+          onClick={() => setStatus("confirmed")}
+        />
         <Stat
           label={t("totalVendors")}
           value={vendorCount}
@@ -166,19 +306,59 @@ export function RequestsBoard({
   );
 }
 
+function FilterChip({
+  active,
+  tone,
+  onClick,
+  children,
+}: {
+  active: boolean;
+  tone?: RequestRow["status"];
+  onClick: () => void;
+  children: React.ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={cn(
+        "rounded-full px-3 py-1.5 text-sm transition",
+        active && !tone && "bg-rose-deep text-white",
+        active && tone === "new" && "bg-rose/30 text-dusty",
+        active && tone === "inProgress" && "bg-amber-100 text-amber-800",
+        active && tone === "contacted" && "bg-sky-100 text-sky-800",
+        active && tone === "confirmed" && "bg-emerald-100 text-emerald-800",
+        !active && "bg-blush/40 text-dusty hover:bg-blush",
+      )}
+    >
+      {children}
+    </button>
+  );
+}
+
 function Stat({
   label,
   value,
   extra,
   icon,
+  active,
+  onClick,
 }: {
   label: string;
   value: number;
   extra?: string;
   icon?: "check" | "users";
+  active?: boolean;
+  onClick?: () => void;
 }) {
-  return (
-    <div className="rounded-[1.4rem] bg-white/90 p-5 shadow-soft">
+  const className = cn(
+    "rounded-[1.4rem] bg-white/90 p-5 text-left shadow-soft",
+    onClick && "transition hover:-translate-y-0.5",
+    active && onClick && "ring-1 ring-rose/40",
+  );
+
+  const body = (
+    <>
       <p className="text-sm text-muted">{label}</p>
       <p className="mt-1 font-serif text-3xl text-ink">{value}</p>
       {extra && (
@@ -187,6 +367,16 @@ function Stat({
           {extra}
         </p>
       )}
-    </div>
+    </>
+  );
+
+  if (!onClick) {
+    return <div className={className}>{body}</div>;
+  }
+
+  return (
+    <button type="button" onClick={onClick} className={className}>
+      {body}
+    </button>
   );
 }

@@ -17,7 +17,8 @@ import {
 } from "lucide-react";
 import { useLocale, useTranslations } from "next-intl";
 import Image from "next/image";
-import { cities, eventTypes, getVendor, services } from "@/data/catalog";
+import { useCatalog } from "@/components/catalog/CatalogProvider";
+import { cities, eventTypes } from "@/data/catalog";
 import { formatEventDate, localized } from "@/lib/format";
 import type { Locale } from "@/i18n/routing";
 import { Link, useRouter } from "@/i18n/navigation";
@@ -50,6 +51,8 @@ function DashboardBody() {
   const setDetails = useEventStore((state) => state.setDetails);
   const activity = useEventStore((state) => state.activity);
   const selections = useEventStore((state) => state.selections);
+  const pastEvents = useEventStore((state) => state.pastEvents);
+  const { services, vendors } = useCatalog();
   const city = cities.find((item) => item.slug === details.citySlug);
 
   return (
@@ -81,8 +84,11 @@ function DashboardBody() {
             <Link href="/my-event" className="rounded-full bg-blush px-4 py-2 text-dusty">
               {t("dashboard")}
             </Link>
+            <Link href="/my-event/events" className="rounded-full px-4 py-2 hover:bg-blush/50">
+              {t("myEventsNav")} ({pastEvents.length})
+            </Link>
             <Link href="/my-event/review" className="rounded-full px-4 py-2 hover:bg-blush/50">
-              {t("myEventsNav")} ({selections.length})
+              {t("review")} ({selections.length})
             </Link>
             <Link href="/my-event/browse" className="rounded-full px-4 py-2 hover:bg-blush/50">
               {t("stepServices")}
@@ -143,7 +149,7 @@ function DashboardBody() {
             </div>
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
               {services.map((service) => {
-                const Icon = icons[service.icon];
+                const Icon = icons[service.icon] ?? Sparkles;
                 return (
                   <Link
                     key={service.slug}
@@ -221,7 +227,9 @@ function DashboardBody() {
               <ul className="mt-4 space-y-3 text-sm">
                 {activity.length === 0 && <li className="text-muted">{t("noActivity")}</li>}
                 {activity.slice(0, 5).map((item) => {
-                  const vendor = item.vendorSlug ? getVendor(item.vendorSlug) : null;
+                  const vendor = item.vendorSlug
+                    ? vendors.find((entry) => entry.slug === item.vendorSlug)
+                    : null;
                   return (
                     <li key={item.id} className="flex gap-3 text-muted">
                       <span className="mt-0.5 grid h-7 w-7 place-items-center rounded-full bg-blush text-dusty">

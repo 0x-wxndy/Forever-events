@@ -10,8 +10,8 @@ import { getLocale, getTranslations } from "next-intl/server";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
 import { Link } from "@/i18n/navigation";
-import { services } from "@/data/catalog";
 import { localized } from "@/lib/format";
+import { readCatalog } from "@/lib/catalog-store";
 import type { Locale } from "@/i18n/routing";
 
 const icons = {
@@ -26,6 +26,7 @@ const icons = {
 export async function HomeServices() {
   const t = await getTranslations("homeServices");
   const locale = (await getLocale()) as Locale;
+  const { services } = await readCatalog();
 
   return (
     <section className="relative overflow-hidden bg-ivory px-5 py-20 lg:px-8">
@@ -58,7 +59,7 @@ export async function HomeServices() {
 
         <div className="mt-12 grid grid-cols-2 gap-4 md:grid-cols-3 lg:grid-cols-6">
           {services.map((service) => {
-            const Icon = icons[service.icon];
+            const Icon = icons[service.icon] ?? Sparkles;
             return (
               <Link
                 key={service.slug}

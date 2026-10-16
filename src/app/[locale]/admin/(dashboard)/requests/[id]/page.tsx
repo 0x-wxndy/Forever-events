@@ -2,6 +2,7 @@ import { getLocale, getTranslations } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { Link } from "@/i18n/navigation";
 import { RequestActions } from "@/components/admin/RequestActions";
+import { readCatalog } from "@/lib/catalog-store";
 import { getRequest } from "@/lib/inbox";
 import type { Locale } from "@/i18n/routing";
 import {
@@ -23,6 +24,7 @@ export default async function AdminRequestDetailPage({
 
   const t = await getTranslations("admin");
   const locale = (await getLocale()) as Locale;
+  const catalog = await readCatalog();
 
   return (
     <div>
@@ -69,9 +71,11 @@ export default async function AdminRequestDetailPage({
         <ul className="mt-4 space-y-3">
           {item.vendors.map((vendor) => (
             <li key={vendor.vendorSlug} className="text-sm text-muted">
-              <span className="font-medium text-ink">{vendorLabel(vendor.vendorSlug)}</span>
+              <span className="font-medium text-ink">
+                {vendorLabel(vendor.vendorSlug, catalog.vendors)}
+              </span>
               {" · "}
-              {serviceLabel(vendor.serviceSlug, locale)}
+              {serviceLabel(vendor.serviceSlug, locale, catalog.services)}
             </li>
           ))}
         </ul>

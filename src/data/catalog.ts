@@ -1,5 +1,7 @@
 export type Localized = { fr: string; en: string };
 
+export type ServiceIcon = "camera" | "flower" | "cake" | "music" | "sparkles" | "map";
+
 export type City = {
   slug: string;
   name: Localized;
@@ -12,7 +14,7 @@ export type Service = {
   tagline: Localized;
   description: Localized;
   image: string;
-  icon: "camera" | "flower" | "cake" | "music" | "sparkles" | "map";
+  icon: ServiceIcon;
 };
 
 export type VendorPackage = {
@@ -31,6 +33,9 @@ export type Vendor = {
   coverImage: string;
   gallery: string[];
   packages: VendorPackage[];
+  rating?: number;
+  reviews?: number;
+  badge?: Localized;
 };
 
 export const cities: City[] = [

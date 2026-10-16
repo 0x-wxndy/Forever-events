@@ -2,16 +2,20 @@ import { getLocale } from "next-intl/server";
 import { getTranslations } from "next-intl/server";
 import Image from "next/image";
 import { Link } from "@/i18n/navigation";
-import type { Vendor } from "@/data/catalog";
-import { getService } from "@/data/catalog";
+import type { Service, Vendor } from "@/data/catalog";
 import { formatPrice, localized } from "@/lib/format";
 import type { Locale } from "@/i18n/routing";
 import { AddToEventButton } from "@/components/event/AddToEventButton";
 
-export async function VendorCard({ vendor }: { vendor: Vendor }) {
+export async function VendorCard({
+  vendor,
+  service,
+}: {
+  vendor: Vendor;
+  service?: Service | null;
+}) {
   const locale = (await getLocale()) as Locale;
   const t = await getTranslations("service");
-  const service = getService(vendor.serviceSlug);
 
   return (
     <article className="overflow-hidden rounded-[1.8rem] bg-white shadow-soft">

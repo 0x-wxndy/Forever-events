@@ -4,7 +4,9 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
+import { CatalogProvider } from "@/components/catalog/CatalogProvider";
 import { SiteChrome } from "@/components/layout/SiteChrome";
+import { readCatalog } from "@/lib/catalog-store";
 import "../globals.css";
 
 const outfit = Outfit({
@@ -53,6 +55,7 @@ export default async function LocaleLayout({
 
   setRequestLocale(locale);
   const messages = await getMessages();
+  const catalog = await readCatalog();
 
   return (
     <html lang={locale}>
@@ -60,7 +63,9 @@ export default async function LocaleLayout({
         className={`${outfit.variable} ${cormorant.variable} ${greatVibes.variable} min-h-screen bg-ivory font-sans text-ink antialiased`}
       >
         <NextIntlClientProvider messages={messages}>
-          <SiteChrome>{children}</SiteChrome>
+          <CatalogProvider catalog={catalog}>
+            <SiteChrome>{children}</SiteChrome>
+          </CatalogProvider>
         </NextIntlClientProvider>
       </body>
     </html>

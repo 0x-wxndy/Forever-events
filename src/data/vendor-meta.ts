@@ -79,7 +79,18 @@ export const vendorMeta: Record<string, VendorMeta> = {
   },
 };
 
-export function getVendorMeta(slug: string): VendorMeta {
+export function getVendorMeta(
+  slug: string,
+  vendor?: { rating?: number; reviews?: number; badge?: Localized },
+): VendorMeta {
+  if (vendor?.rating != null || vendor?.reviews != null || vendor?.badge) {
+    const fallback = vendorMeta[slug];
+    return {
+      rating: vendor.rating ?? fallback?.rating ?? 4.8,
+      reviews: vendor.reviews ?? fallback?.reviews ?? 24,
+      badge: vendor.badge ?? fallback?.badge ?? { fr: "Sélectionné", en: "Curated" },
+    };
+  }
   return (
     vendorMeta[slug] ?? {
       rating: 4.8,

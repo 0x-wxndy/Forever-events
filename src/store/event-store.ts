@@ -28,18 +28,28 @@ export type EventDetails = {
   email: string;
 };
 
+export type SavedEvent = {
+  id: string;
+  submittedAt: string;
+  details: EventDetails;
+  selections: EventSelection[];
+};
+
 type EventState = {
   details: EventDetails;
   selections: EventSelection[];
   lastAdded: EventSelection | null;
   submitted: boolean;
+  lastSubmittedId: string | null;
   activity: EventActivity[];
+  pastEvents: SavedEvent[];
   setDetails: (patch: Partial<EventDetails>) => void;
   startEvent: (patch: Partial<EventDetails>) => void;
   addVendor: (selection: EventSelection) => void;
   removeVendor: (vendorSlug: string) => void;
   clearLastAdded: () => void;
-  markSubmitted: () => void;
+  saveSubmitted: (id: string) => void;
+  startNewDraft: () => void;
   resetEvent: () => void;
 };
 
@@ -78,7 +88,9 @@ export const useEventStore = create<EventState>()(
       selections: [],
       lastAdded: null,
       submitted: false,
+      lastSubmittedId: null,
       activity: [],
+      pastEvents: [],
       setDetails: (patch) =>
         set({
           details: { ...get().details, ...patch },
@@ -114,29 +126,54 @@ export const useEventStore = create<EventState>()(
           activity: [activityItem("removed", vendorSlug), ...get().activity].slice(0, 12),
         }),
       clearLastAdded: () => set({ lastAdded: null }),
-      markSubmitted: () =>
+      saveSubmitted: (id) => {
+        const snapshot: SavedEvent = {
+          id,
+          submittedAt: new Date().toISOString(),
+          details: get().details,
+          selections: get().selections,
+        };
+        const already = get().pastEvents.some((item) => item.id === id);
         set({
           submitted: true,
+          lastSubmittedId: id,
           lastAdded: null,
+          pastEvents: already ? get().pastEvents : [snapshot, ...get().pastEvents],
           activity: [activityItem("submitted"), ...get().activity].slice(0, 12),
-        }),
+        });
+      },
+      startNewDraft: () => {
+        const { name, phone, email, citySlug } = get().details;
+        set({
+          details: { ...emptyDetails, name, phone, email, citySlug },
+          selections: [],
+          lastAdded: null,
+          submitted: false,
+          lastSubmittedId: null,
+          activity: [activityItem("created")],
+        });
+      },
       resetEvent: () =>
         set({
           details: emptyDetails,
           selections: [],
           lastAdded: null,
           submitted: false,
+          lastSubmittedId: null,
           activity: [],
+          pastEvents: get().pastEvents,
         }),
     }),
     {
       name: "forever-my-event",
-      version: 2,
+      version: 3,
       partialize: (state) => ({
         details: state.details,
         selections: state.selections,
         submitted: state.submitted,
+        lastSubmittedId: state.lastSubmittedId,
         activity: state.activity,
+        pastEvents: state.pastEvents,
       }),
       migrate: (persisted) => {
         const previous = persisted as Partial<EventState> & { citySlug?: string };
@@ -149,10 +186,16 @@ export const useEventStore = create<EventState>()(
             selections: previous.selections ?? [],
             lastAdded: null,
             submitted: false,
+            lastSubmittedId: null,
             activity: [],
+            pastEvents: [],
           };
         }
-        return previous as EventState;
+        return {
+          ...(previous as EventState),
+          pastEvents: previous.pastEvents ?? [],
+          lastSubmittedId: previous.lastSubmittedId ?? null,
+        };
       },
     },
   ),

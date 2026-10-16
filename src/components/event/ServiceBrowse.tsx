@@ -15,7 +15,8 @@ import { useMemo, useState } from "react";
 import { EventStepper } from "@/components/event/EventStepper";
 import { FloralScreen } from "@/components/event/FloralScreen";
 import { RequireEventDetails } from "@/components/event/RequireEventDetails";
-import { cities, getCity, getService, services, vendors } from "@/data/catalog";
+import { useCatalog, useLiveService } from "@/components/catalog/CatalogProvider";
+import { cities, getCity } from "@/data/catalog";
 import { getVendorMeta } from "@/data/vendor-meta";
 import { localized } from "@/lib/format";
 import type { Locale } from "@/i18n/routing";
@@ -48,21 +49,22 @@ function BrowseBody({
   const locale = useLocale() as Locale;
   const details = useEventStore((state) => state.details);
   const addVendor = useEventStore((state) => state.addVendor);
+  const removeVendor = useEventStore((state) => state.removeVendor);
   const setDetails = useEventStore((state) => state.setDetails);
   const selections = useEventStore((state) => state.selections);
   const [query, setQuery] = useState(initialQuery);
   const [category, setCategory] = useState<string | null>(serviceSlug ?? null);
   const [filterOpen, setFilterOpen] = useState(false);
   const [city, setCity] = useState(details.citySlug || "oran");
-
-  const activeService = category ? getService(category) : null;
+  const { services, vendors } = useCatalog();
+  const activeService = useLiveService(category);
 
   const list = useMemo(() => {
     const needle = query.trim().toLowerCase();
     return vendors.filter((vendor) => {
       if (category && vendor.serviceSlug !== category) return false;
       if (!needle) return true;
-      const service = getService(vendor.serviceSlug);
+      const service = services.find((item) => item.slug === vendor.serviceSlug);
       const haystack = [
         vendor.name,
         localized(vendor.bio, locale),
@@ -72,7 +74,7 @@ function BrowseBody({
         .toLowerCase();
       return haystack.includes(needle);
     });
-  }, [category, locale, query]);
+  }, [category, locale, query, services, vendors]);
 
   function onQueryChange(value: string) {
     setQuery(value);
@@ -203,7 +205,7 @@ function BrowseBody({
 
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         {list.map((vendor) => {
-          const meta = getVendorMeta(vendor.slug);
+          const meta = getVendorMeta(vendor.slug, vendor);
           const selected = selections.some((item) => item.vendorSlug === vendor.slug);
           const cityLabel = getCity(vendor.citySlug);
           return (
@@ -211,7 +213,7 @@ function BrowseBody({
               key={vendor.slug}
               className="overflow-hidden rounded-[1.6rem] bg-white/90 shadow-soft"
             >
-              <div className="relative h-44">
+              <Link href={`/vendors/${vendor.slug}?from=browse`} className="relative block h-44">
                 <Image src={vendor.coverImage} alt={vendor.name} fill className="object-cover" />
                 <span className="absolute left-3 top-3 rounded-full bg-white/90 px-2.5 py-1 text-[11px] text-dusty">
                   {localized(meta.badge, locale)}
@@ -219,9 +221,11 @@ function BrowseBody({
                 <span className="absolute right-3 top-3 grid h-8 w-8 place-items-center rounded-full bg-white/90 text-rose-deep">
                   <Heart className={cn("h-4 w-4", selected && "fill-rose-deep")} />
                 </span>
-              </div>
+              </Link>
               <div className="p-4">
-                <h3 className="font-medium text-ink">{vendor.name}</h3>
+                <Link href={`/vendors/${vendor.slug}?from=browse`}>
+                  <h3 className="font-medium text-ink hover:text-dusty">{vendor.name}</h3>
+                </Link>
                 <p className="mt-1 flex items-center gap-1 text-xs text-muted">
                   <MapPin className="h-3 w-3" />{" "}
                   {cityLabel ? localized(cityLabel.name, locale) : vendor.citySlug}
@@ -235,13 +239,17 @@ function BrowseBody({
                 </p>
                 <button
                   type="button"
-                  onClick={() =>
+                  onClick={() => {
+                    if (selected) {
+                      removeVendor(vendor.slug);
+                      return;
+                    }
                     addVendor({
                       vendorSlug: vendor.slug,
                       serviceSlug: vendor.serviceSlug,
                       citySlug: vendor.citySlug,
-                    })
-                  }
+                    });
+                  }}
                   className={cn(
                     "mt-4 flex w-full items-center justify-center gap-2 rounded-full py-2.5 text-sm",
                     selected
@@ -249,8 +257,8 @@ function BrowseBody({
                       : "bg-rose-deep text-white",
                   )}
                 >
-                  {selected ? t("addedShort") : t("addToEvent")}
-                  <Heart className="h-4 w-4" />
+                  {selected ? t("remove") : t("addToEvent")}
+                  <Heart className={cn("h-4 w-4", selected && "fill-rose-deep")} />
                 </button>
               </div>
             </article>

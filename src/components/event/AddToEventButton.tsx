@@ -20,6 +20,7 @@ export function AddToEventButton({
   const hydrated = useHasHydrated();
   const details = useEventStore((state) => state.details);
   const addVendor = useEventStore((state) => state.addVendor);
+  const removeVendor = useEventStore((state) => state.removeVendor);
   const selected = useEventStore((state) =>
     state.selections.some((item) => item.vendorSlug === vendorSlug),
   );
@@ -40,6 +41,10 @@ export function AddToEventButton({
           router.push("/create");
           return;
         }
+        if (selected) {
+          removeVendor(vendorSlug);
+          return;
+        }
         addVendor({ vendorSlug, serviceSlug, citySlug });
       }}
       className={
@@ -48,7 +53,7 @@ export function AddToEventButton({
           : "inline-flex items-center gap-2 rounded-full bg-rose-deep px-5 py-2.5 text-sm text-white shadow-[0_10px_24px_rgba(201,120,144,0.28)]"
       }
     >
-      {selected ? t("addedShort") : t("addToEvent")}
+      {selected ? t("remove") : t("addToEvent")}
       <Heart className="h-4 w-4" />
     </button>
   );
